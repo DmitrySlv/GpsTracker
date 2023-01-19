@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="location_time_update_name">
+        <item>3 сек</item>
+        <item>5 сек</item>
+        <item>10 сек</item>
+    </string-array>
+
+    <string-array name="location_time_update_value">
+        <item>3000</item>
+        <item>5000</item>
+        <item>10000</item>
+    </string-array>
+</resources>
