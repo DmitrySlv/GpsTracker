@@ -1,5 +1,6 @@
 package com.dscreate_app.gpstracker.utils
 
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -13,10 +14,15 @@ fun Fragment.openFragment(frag: Fragment) {
 }
 
 fun AppCompatActivity.openFragment(frag: Fragment) {
-    supportFragmentManager.beginTransaction()
-        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-        .replace(R.id.placeHolder, frag)
-        .commit()
+    if (supportFragmentManager.fragments.isNotEmpty()) {
+        if (supportFragmentManager.fragments[0].javaClass == frag.javaClass) {
+            return
+        }
+    }
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+            .replace(R.id.placeHolder, frag)
+            .commit()
 }
 
 fun Fragment.showToast(string: String) {
