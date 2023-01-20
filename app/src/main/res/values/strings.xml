@@ -8,4 +8,6 @@
     <string name="update_time">Обновить время</string>
     <string name="update_time_summary">Обновление времени местоположения</string>
     <string name="location">Местоположение</string>
+    <string name="track_color">Цвет маршрута</string>
+    <string name="track_color_summary">Выбор цвета маршрута</string>
 </resources>

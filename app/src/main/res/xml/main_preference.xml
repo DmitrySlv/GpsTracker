@@ -12,5 +12,14 @@
             android:title="@string/update_time"
             app:icon="@drawable/update_time"
             app:summary="@string/update_time_summary" />
+
+        <ListPreference
+            android:defaultValue="#03A9F4"
+            android:entries="@array/color_name"
+            android:entryValues="@array/color_value"
+            android:key="color_key"
+            android:title="@string/track_color"
+            app:icon="@drawable/ic_circle"
+            app:summary="@string/track_color_summary" />
     </PreferenceCategory>
 </PreferenceScreen>
