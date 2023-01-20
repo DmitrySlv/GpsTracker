@@ -1,12 +1,14 @@
 package com.dscreate_app.gpstracker.fragments
 
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.dscreate_app.gpstracker.R
+import androidx.fragment.app.Fragment
 import com.dscreate_app.gpstracker.databinding.FragmentMainBinding
+import org.osmdroid.config.Configuration
+import org.osmdroid.library.BuildConfig
 
 class MainFragment : Fragment() {
 
@@ -18,6 +20,7 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        settingsOsm()
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -27,7 +30,17 @@ class MainFragment : Fragment() {
         _binding = null
     }
 
+    private fun settingsOsm() {
+        Configuration.getInstance().load(
+            requireActivity(),
+            activity?.getSharedPreferences(SHARED_PREF_TABLE_NAME, Context.MODE_PRIVATE)
+        )
+        Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
+    }
+
     companion object {
+
+        private const val SHARED_PREF_TABLE_NAME = "osm_pref"
 
         @JvmStatic
         fun newInstance() = MainFragment()
