@@ -10,4 +10,6 @@
     <string name="location">Местоположение</string>
     <string name="track_color">Цвет маршрута</string>
     <string name="track_color_summary">Выбор цвета маршрута</string>
+    <!--Main Fragment-->
+    <string name="toast_need_perm">"Пожалуйста, разрешите использование вашего местоположения!"</string>
 </resources>

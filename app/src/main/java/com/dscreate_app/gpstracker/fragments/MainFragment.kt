@@ -1,12 +1,20 @@
 package com.dscreate_app.gpstracker.fragments
 
+import android.Manifest
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.dscreate_app.gpstracker.R
 import com.dscreate_app.gpstracker.databinding.FragmentMainBinding
+import com.dscreate_app.gpstracker.utils.checkPermission
+import com.dscreate_app.gpstracker.utils.showToast
 import org.osmdroid.config.Configuration
 import org.osmdroid.library.BuildConfig
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
@@ -17,6 +25,8 @@ class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding: FragmentMainBinding
         get() = _binding ?: throw RuntimeException("FragmentMainBinding is null")
+
+    private lateinit var permLauncher: ActivityResultLauncher<Array<String>>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,12 +39,56 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initOSM()
+        registerPermissions()
+        checkLocationPermission()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun registerPermissions() {
+        permLauncher = registerForActivityResult(ActivityResultContracts
+            .RequestMultiplePermissions()) {
+            if (it[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
+                initOSM()
+            } else {
+                showToast(getString(R.string.toast_need_perm))
+            }
+        }
+    }
+
+    private fun checkLocationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            checkPermissionAfter10()
+        } else {
+            checkPermissionBefore10()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun checkPermissionAfter10() {
+        if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
+            checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+        ) {
+            initOSM()
+        } else {
+            permLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                )
+            )
+        }
+    }
+
+    private fun checkPermissionBefore10() {
+        if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            initOSM()
+        } else {
+            permLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
+        }
     }
 
     private fun settingsOsm() {
