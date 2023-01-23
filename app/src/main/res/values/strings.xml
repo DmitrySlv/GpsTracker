@@ -13,4 +13,9 @@
     <!--Main Fragment-->
     <string name="toast_need_perm">"Пожалуйста, разрешите использование вашего местоположения!"</string>
     <string name="toast_gps_disabled">"GPS выключен. Пожалуйста, включите его на своем устройстве"</string>
+    <!--Dialog Manager-->
+    <string name="location_disabled">Ваша геолокация отключена</string>
+    <string name="location_disabled_message">Хотите включить GPS?</string>
+    <string name="yes">Да</string>
+    <string name="no">Отмена</string>
 </resources>

@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.dscreate_app.gpstracker.R
 import com.dscreate_app.gpstracker.databinding.FragmentMainBinding
+import com.dscreate_app.gpstracker.utils.DialogManager
 import com.dscreate_app.gpstracker.utils.checkPermission
 import com.dscreate_app.gpstracker.utils.showToast
 import org.osmdroid.config.Configuration
@@ -119,7 +120,7 @@ class MainFragment : Fragment() {
         val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val isEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         if (!isEnabled) {
-            showToast(getString(R.string.toast_gps_disabled))
+            DialogManager.showLocEnabledDialog(requireActivity())
         } else {
             showToast("GPS включен")
         }
