@@ -2,6 +2,7 @@ package com.dscreate_app.gpstracker.fragments
 
 import android.Manifest
 import android.content.Context
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -48,11 +49,32 @@ class MainFragment : Fragment() {
         _binding = null
     }
 
+    private fun settingsOsm() {
+        Configuration.getInstance().load(
+            requireActivity(),
+            activity?.getSharedPreferences(SHARED_PREF_TABLE_NAME, Context.MODE_PRIVATE)
+        )
+        Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
+    }
+
+    private fun initOSM() = with(binding) {
+       map.controller.setZoom(20.0)
+        val mLocProvider = GpsMyLocationProvider(activity)
+        val myLocOverlay = MyLocationNewOverlay(mLocProvider, map)
+        myLocOverlay.enableMyLocation()
+        myLocOverlay.enableFollowLocation()
+        myLocOverlay.runOnFirstFix {
+            map.overlays.clear()
+            map.overlays.add(myLocOverlay)
+        }
+    }
+
     private fun registerPermissions() {
         permLauncher = registerForActivityResult(ActivityResultContracts
             .RequestMultiplePermissions()) {
             if (it[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
                 initOSM()
+                checkLocationEnabled()
             } else {
                 showToast(getString(R.string.toast_need_perm))
             }
@@ -73,6 +95,7 @@ class MainFragment : Fragment() {
             checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
         ) {
             initOSM()
+            checkLocationEnabled()
         } else {
             permLauncher.launch(
                 arrayOf(
@@ -86,28 +109,19 @@ class MainFragment : Fragment() {
     private fun checkPermissionBefore10() {
         if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
             initOSM()
+            checkLocationEnabled()
         } else {
             permLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
         }
     }
 
-    private fun settingsOsm() {
-        Configuration.getInstance().load(
-            requireActivity(),
-            activity?.getSharedPreferences(SHARED_PREF_TABLE_NAME, Context.MODE_PRIVATE)
-        )
-        Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
-    }
-
-    private fun initOSM() = with(binding) {
-       map.controller.setZoom(20.0)
-        val mLocProvider = GpsMyLocationProvider(activity)
-        val myLocOverlay = MyLocationNewOverlay(mLocProvider, map)
-        myLocOverlay.enableMyLocation()
-        myLocOverlay.enableFollowLocation()
-        myLocOverlay.runOnFirstFix {
-            map.overlays.clear()
-            map.overlays.add(myLocOverlay)
+    private fun checkLocationEnabled() {
+        val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val isEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        if (!isEnabled) {
+            showToast(getString(R.string.toast_gps_disabled))
+        } else {
+            showToast("GPS включен")
         }
     }
 
