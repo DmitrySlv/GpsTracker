@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,6 +33,7 @@ class MainFragment : Fragment() {
         get() = _binding ?: throw RuntimeException("FragmentMainBinding is null")
 
     private lateinit var permLauncher: ActivityResultLauncher<Array<String>>
+    private var isServiceRunning = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,11 +47,8 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         registerPermissions()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            requireActivity().startForegroundService(Intent(activity, LocationService::class.java))
-        } else {
-            requireActivity().startService(Intent(activity, LocationService::class.java))
-        }
+        setOnClicks()
+        checkServiceState()
     }
 
     override fun onResume() {
@@ -60,6 +59,47 @@ class MainFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setOnClicks() = with(binding){
+        val listener = onClicks()
+        fStartStop.setOnClickListener(listener)
+    }
+
+    private fun onClicks(): OnClickListener {
+        return OnClickListener {
+            when(it.id) {
+                R.id.fStartStop -> {
+                    startStopService()
+                }
+            }
+        }
+    }
+
+    private fun checkServiceState() {
+        isServiceRunning = LocationService.isRunning
+        if (isServiceRunning) {
+            binding.fStartStop.setImageResource(R.drawable.ic_stop)
+        }
+    }
+
+    private fun startStopService() {
+        if (!isServiceRunning) {
+            startLocService()
+        } else {
+            requireActivity().stopService(Intent(activity, LocationService::class.java))
+            binding.fStartStop.setImageResource(R.drawable.ic_play)
+        }
+        isServiceRunning = !isServiceRunning
+    }
+
+    private fun startLocService() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            requireActivity().startForegroundService(Intent(activity, LocationService::class.java))
+        } else {
+            requireActivity().startService(Intent(activity, LocationService::class.java))
+        }
+        binding.fStartStop.setImageResource(R.drawable.ic_stop)
     }
 
     private fun settingsOsm() {

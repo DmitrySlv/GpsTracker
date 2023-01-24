@@ -21,17 +21,17 @@ class LocationService: Service() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d("MyLog", "onCreate")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startNotification()
+        isRunning = true
         return START_STICKY
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("MyLog", "onDestroy")
+        isRunning = false
     }
 
     private fun startNotification() {
@@ -65,5 +65,7 @@ class LocationService: Service() {
         private const val CHANNEL_NAME = "Location Service"
         private const val REQUEST_CODE = 10
         private const val NOTIFICATION_ID = 99
+
+        var isRunning = false
     }
 }
