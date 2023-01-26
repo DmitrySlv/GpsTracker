@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Build
 import android.os.IBinder
 import android.os.Looper
@@ -23,6 +24,8 @@ class LocationService: Service() {
 
     private lateinit var locationProvider: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
+    private var lastLocation: Location? = null
+    private var distance = 0.0f
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -49,7 +52,12 @@ class LocationService: Service() {
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
-            Log.d("MyLog", "Location: ${locationResult.lastLocation?.latitude}")
+            val currentLocation = locationResult.lastLocation
+            if (lastLocation != null && currentLocation != null) {
+                if (currentLocation.speed > 0.2) distance += lastLocation?.distanceTo(currentLocation) ?: 0.0f
+            }
+            lastLocation = currentLocation
+            Log.d("MyLog", "Distance: $distance")
         }
     }
 
