@@ -67,5 +67,6 @@ class LocationService: Service() {
         private const val NOTIFICATION_ID = 99
 
         var isRunning = false
+        var startTime = 0L
     }
 }
