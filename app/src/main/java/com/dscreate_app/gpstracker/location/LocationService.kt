@@ -69,7 +69,6 @@ class LocationService: Service() {
                 sendLocData(locModel)
             }
             lastLocation = currentLocation
-            Log.d("MyLog", "Distance: $distance")
         }
     }
 
@@ -132,7 +131,7 @@ class LocationService: Service() {
         private const val CHANNEL_NAME = "Location Service"
         private const val REQUEST_CODE = 10
         private const val NOTIFICATION_ID = 99
-        private const val LOC_MODEL_INTENT = "loc_intent"
+        const val LOC_MODEL_INTENT = "loc_intent"
 
         var isRunning = false
         var startTime = 0L

@@ -1,12 +1,15 @@
 package com.dscreate_app.gpstracker.fragments
 
 import android.Manifest
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
@@ -16,8 +19,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.dscreate_app.gpstracker.R
 import com.dscreate_app.gpstracker.databinding.FragmentMainBinding
+import com.dscreate_app.gpstracker.location.LocationModel
 import com.dscreate_app.gpstracker.location.LocationService
 import com.dscreate_app.gpstracker.utils.DialogManager
 import com.dscreate_app.gpstracker.utils.TimeUtils
@@ -56,6 +61,7 @@ class MainFragment : Fragment() {
         setOnClicks()
         checkServiceState()
         updateTime()
+        registerLocReceiver()
     }
 
     override fun onResume() {
@@ -216,6 +222,22 @@ class MainFragment : Fragment() {
         } else {
             showToast("GPS включен")
         }
+    }
+
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == LocationService.LOC_MODEL_INTENT) {
+                val locModel = intent.getSerializableExtra(
+                    LocationService.LOC_MODEL_INTENT) as LocationModel
+                Log.d("MyLog", "Main Fragment Distance: ${locModel.distance}")
+            }
+        }
+    }
+
+    private fun registerLocReceiver() {
+        val locFilter = IntentFilter(LocationService.LOC_MODEL_INTENT)
+        LocalBroadcastManager.getInstance(requireActivity())
+            .registerReceiver(receiver, locFilter)
     }
 
     companion object {
