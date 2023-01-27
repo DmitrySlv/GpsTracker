@@ -93,7 +93,7 @@ class LocationService: Service() {
             this,
             REQUEST_CODE,
             notificationIntent,
-            0
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         )
         val notification = NotificationCompat.Builder(
             this, CHANNEL_ID

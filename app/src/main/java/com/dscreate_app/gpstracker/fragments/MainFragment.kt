@@ -18,6 +18,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.dscreate_app.gpstracker.R
@@ -28,6 +29,7 @@ import com.dscreate_app.gpstracker.utils.DialogManager
 import com.dscreate_app.gpstracker.utils.TimeUtils
 import com.dscreate_app.gpstracker.utils.checkPermission
 import com.dscreate_app.gpstracker.utils.showToast
+import com.dscreate_app.gpstracker.viewModels.MainViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.library.BuildConfig
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
@@ -44,7 +46,7 @@ class MainFragment : Fragment() {
     private var isServiceRunning = false
     private var timer: Timer? = null
     private var startTime = 0L
-    private val timeData = MutableLiveData<String>()
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,6 +64,7 @@ class MainFragment : Fragment() {
         checkServiceState()
         updateTime()
         registerLocReceiver()
+        locationUpdates()
     }
 
     override fun onResume() {
@@ -74,6 +77,19 @@ class MainFragment : Fragment() {
         _binding = null
     }
 
+    private fun locationUpdates() = with(binding) {
+        viewModel.locationUpdates.observe(viewLifecycleOwner) {
+            val distance = getString(R.string.distance_tv) + String.format("%.1f", it.distance) +
+            getString(R.string.meter_tv)
+
+            val speed = getString(R.string.speed_tv) + String.format("%.1f", it.speed) +
+                    getString(R.string.speed_tv_in_hour)
+
+            tvDistance.text = distance
+            tvSpeed.text = speed
+        }
+    }
+
     private fun startTimer() {
         timer?.cancel()
         timer = Timer()
@@ -81,18 +97,18 @@ class MainFragment : Fragment() {
         timer?.schedule(object : TimerTask() {
             override fun run() {
               activity?.runOnUiThread {
-                  timeData.value = getCurrentTime()
+                 viewModel.timeData.value = getCurrentTime()
               }
             }
         }, 1000, 1000)
     }
 
     private fun getCurrentTime(): String {
-        return "Время: ${TimeUtils.getTime(System.currentTimeMillis() - startTime)}"
+        return getString(R.string.time_tv) + TimeUtils.getTime(System.currentTimeMillis() - startTime)
     }
 
     private fun updateTime() {
-        timeData.observe(viewLifecycleOwner) {
+      viewModel.timeData.observe(viewLifecycleOwner) {
             binding.tvTime.text = it
         }
     }
@@ -229,7 +245,7 @@ class MainFragment : Fragment() {
             if (intent?.action == LocationService.LOC_MODEL_INTENT) {
                 val locModel = intent.getSerializableExtra(
                     LocationService.LOC_MODEL_INTENT) as LocationModel
-                Log.d("MyLog", "Main Fragment Distance: ${locModel.distance}")
+                viewModel.locationUpdates.value = locModel
             }
         }
     }
