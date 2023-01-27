@@ -9,7 +9,6 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
@@ -19,7 +18,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.dscreate_app.gpstracker.R
 import com.dscreate_app.gpstracker.databinding.FragmentMainBinding
@@ -79,14 +77,19 @@ class MainFragment : Fragment() {
 
     private fun locationUpdates() = with(binding) {
         viewModel.locationUpdates.observe(viewLifecycleOwner) {
-            val distance = getString(R.string.distance_tv) + String.format("%.1f", it.distance) +
-            getString(R.string.meter_tv)
-
-            val speed = getString(R.string.speed_tv) + String.format("%.1f", it.speed) +
-                    getString(R.string.speed_tv_in_hour)
+            val distance =
+                getString(R.string.distance_tv) + String.format("%.1f", it.distance) +
+                        getString(R.string.meter_tv)
+            val speed =
+                getString(R.string.speed_tv) + String.format("%.1f", it.speed) +
+                        getString(R.string.speed_tv_in_meter)
+            val averageSpeed =
+                getString(R.string.speed_average_tv) + String.format(getAverageSpeed(it.distance)) +
+                        getString(R.string.speed_tv_in_meter)
 
             tvDistance.text = distance
             tvSpeed.text = speed
+            tvAverageSpeed.text = averageSpeed
         }
     }
 
@@ -101,6 +104,13 @@ class MainFragment : Fragment() {
               }
             }
         }, 1000, 1000)
+    }
+
+    private fun getAverageSpeed(distance: Float): String {
+        return String.format(
+            "%.1f",
+            (distance / ((System.currentTimeMillis() - startTime) / 1000.0f))
+        )
     }
 
     private fun getCurrentTime(): String {
