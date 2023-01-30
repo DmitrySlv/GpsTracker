@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
@@ -30,9 +31,12 @@ import com.dscreate_app.gpstracker.utils.showToast
 import com.dscreate_app.gpstracker.viewModels.MainViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.library.BuildConfig
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainFragment : Fragment() {
 
@@ -44,6 +48,8 @@ class MainFragment : Fragment() {
     private var isServiceRunning = false
     private var timer: Timer? = null
     private var startTime = 0L
+    private var polyLine: Polyline? = null
+    private var firstStart: Boolean = true
     private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -75,6 +81,12 @@ class MainFragment : Fragment() {
         _binding = null
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        LocalBroadcastManager.getInstance(requireActivity())
+            .unregisterReceiver(receiver)
+    }
+
     private fun locationUpdates() = with(binding) {
         viewModel.locationUpdates.observe(viewLifecycleOwner) {
             val distance =
@@ -90,6 +102,7 @@ class MainFragment : Fragment() {
             tvDistance.text = distance
             tvSpeed.text = speed
             tvAverageSpeed.text = averageSpeed
+            updatePolyLine(it.geoPointsList)
         }
     }
 
@@ -177,7 +190,9 @@ class MainFragment : Fragment() {
     }
 
     private fun initOSM() = with(binding) {
-       map.controller.setZoom(20.0)
+        polyLine = Polyline()
+        polyLine?.outlinePaint?.color = Color.BLUE
+        map.controller.setZoom(20.0)
         val mLocProvider = GpsMyLocationProvider(activity)
         val myLocOverlay = MyLocationNewOverlay(mLocProvider, map)
         myLocOverlay.enableMyLocation()
@@ -185,6 +200,7 @@ class MainFragment : Fragment() {
         myLocOverlay.runOnFirstFix {
             map.overlays.clear()
             map.overlays.add(myLocOverlay)
+            map.overlays.add(polyLine)
         }
     }
 
@@ -264,6 +280,25 @@ class MainFragment : Fragment() {
         val locFilter = IntentFilter(LocationService.LOC_MODEL_INTENT)
         LocalBroadcastManager.getInstance(requireActivity())
             .registerReceiver(receiver, locFilter)
+    }
+
+    private fun addPoint(list: ArrayList<GeoPoint>) {
+        polyLine?.addPoint(list[list.size - 1])
+    }
+
+    private fun fillPolyLine(list: ArrayList<GeoPoint>) {
+        list.forEach {
+            polyLine?.addPoint(it)
+        }
+    }
+
+    private fun updatePolyLine(list: ArrayList<GeoPoint>) {
+        if (list.size > 1 && firstStart) {
+            fillPolyLine(list)
+            firstStart = false
+        } else {
+            addPoint(list)
+        }
     }
 
     companion object {
