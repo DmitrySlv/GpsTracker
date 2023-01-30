@@ -24,6 +24,9 @@
     <string name="location_disabled_message">Хотите включить GPS?</string>
     <string name="yes">Да</string>
     <string name="no">Отмена</string>
+    <string name="minutes"> минут</string>
+    <string name="meter_in_sec"> м/с</string>
+    <string name="distance_in_kilometer"> км</string>
     <!--save_dialog-->
     <string name="save_this_track">Сохранить этот маршрут?</string>
     <string name="button_save">Сохранить</string>

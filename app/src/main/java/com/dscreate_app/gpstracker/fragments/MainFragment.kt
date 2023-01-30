@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.dscreate_app.gpstracker.R
+import com.dscreate_app.gpstracker.database.TrackItem
 import com.dscreate_app.gpstracker.databinding.FragmentMainBinding
 import com.dscreate_app.gpstracker.location.LocationModel
 import com.dscreate_app.gpstracker.location.LocationService
@@ -50,6 +51,7 @@ class MainFragment : Fragment() {
     private var startTime = 0L
     private var polyLine: Polyline? = null
     private var firstStart: Boolean = true
+    private var trackItem: TrackItem? = null
     private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -102,6 +104,14 @@ class MainFragment : Fragment() {
             tvDistance.text = distance
             tvSpeed.text = speed
             tvAverageSpeed.text = averageSpeed
+            trackItem = TrackItem(
+                null,
+                getCurrentTime(),
+                TimeUtils.getDate(),
+                String.format("%.1f", it.distance / 1000),
+                getAverageSpeed(it.distance),
+                ""
+            )
             updatePolyLine(it.geoPointsList)
         }
     }
@@ -127,7 +137,9 @@ class MainFragment : Fragment() {
     }
 
     private fun getCurrentTime(): String {
-        return getString(R.string.time_tv) + TimeUtils.getTime(System.currentTimeMillis() - startTime)
+        return getString(R.string.time_tv) + TimeUtils.getTime(
+            System.currentTimeMillis() - startTime
+        )
     }
 
     private fun updateTime() {
@@ -166,7 +178,10 @@ class MainFragment : Fragment() {
             activity?.stopService(Intent(activity, LocationService::class.java))
             binding.fStartStop.setImageResource(R.drawable.ic_play)
             timer?.cancel()
-            DialogManager.showSaveDialog(requireContext(), object : DialogManager.Listener {
+            DialogManager.showSaveDialog(
+                requireContext(),
+                trackItem,
+                object : DialogManager.Listener {
                 override fun onClick() {
                     showToast("Маршрут сохранён!")
                 }
