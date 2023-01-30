@@ -24,4 +24,11 @@
     <string name="location_disabled_message">Хотите включить GPS?</string>
     <string name="yes">Да</string>
     <string name="no">Отмена</string>
+    <!--save_dialog-->
+    <string name="save_this_track">Сохранить этот маршрут?</string>
+    <string name="button_save">Сохранить</string>
+    <string name="button_cancel">Отменить</string>
+    <string name="tv_time_dialog">Время:</string>
+    <string name="tv_speed_dialog">Скорость:</string>
+    <string name="tv_distance_dialog">Дистанция:</string>
 </resources>
