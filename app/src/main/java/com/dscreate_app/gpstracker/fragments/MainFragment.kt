@@ -166,6 +166,11 @@ class MainFragment : Fragment() {
             activity?.stopService(Intent(activity, LocationService::class.java))
             binding.fStartStop.setImageResource(R.drawable.ic_play)
             timer?.cancel()
+            DialogManager.showSaveDialog(requireContext(), object : DialogManager.Listener {
+                override fun onClick() {
+                    showToast("Маршрут сохранён!")
+                }
+            })
         }
         isServiceRunning = !isServiceRunning
     }
