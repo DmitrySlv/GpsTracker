@@ -28,4 +28,6 @@ abstract class MainDb: RoomDatabase() {
             }
         }
     }
+
+    abstract fun getDao(): Dao
 }
