@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.dscreate_app.gpstracker.MainApp
 import com.dscreate_app.gpstracker.R
 import com.dscreate_app.gpstracker.database.TrackItem
 import com.dscreate_app.gpstracker.databinding.FragmentMainBinding
@@ -31,6 +32,7 @@ import com.dscreate_app.gpstracker.utils.TimeUtils
 import com.dscreate_app.gpstracker.utils.checkPermission
 import com.dscreate_app.gpstracker.utils.showToast
 import com.dscreate_app.gpstracker.viewModels.MainViewModel
+import com.dscreate_app.gpstracker.viewModels.ViewModelFactory
 import org.osmdroid.config.Configuration
 import org.osmdroid.library.BuildConfig
 import org.osmdroid.util.GeoPoint
@@ -53,7 +55,9 @@ class MainFragment : Fragment() {
     private var polyLine: Polyline? = null
     private var firstStart: Boolean = true
     private var locationModel: LocationModel? = null
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels {
+        ViewModelFactory((requireContext().applicationContext as MainApp).database)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,6 +76,9 @@ class MainFragment : Fragment() {
         updateTime()
         registerLocReceiver()
         locationUpdates()
+        viewModel.tracks.observe(viewLifecycleOwner) {
+            Log.d("MyLog", "List size: ${it.size}")
+        }
     }
 
     override fun onResume() {
@@ -181,12 +188,14 @@ class MainFragment : Fragment() {
             activity?.stopService(Intent(activity, LocationService::class.java))
             binding.fStartStop.setImageResource(R.drawable.ic_play)
             timer?.cancel()
+            val track = getTrackItem()
             DialogManager.showSaveDialog(
                 requireContext(),
-                getTrackItem(),
+                track,
                 object : DialogManager.Listener {
                 override fun onClick() {
                     showToast("Маршрут сохранён!")
+                    viewModel.insertTrack(track)
                 }
             })
         }

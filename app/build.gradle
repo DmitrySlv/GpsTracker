@@ -52,8 +52,9 @@ dependencies {
     implementation 'com.github.MKergall:osmbonuspack:6.7.0'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
 
-    implementation 'androidx.room:room-ktx:2.5.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
-    kapt 'androidx.room:room-compiler:2.5.0'
+    implementation "androidx.room:room-runtime:2.5.0"
+    implementation "androidx.room:room-ktx:2.5.0"
+    kapt "androidx.room:room-compiler:2.5.0"
 }
