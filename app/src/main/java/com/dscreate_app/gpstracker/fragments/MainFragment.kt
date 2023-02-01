@@ -76,9 +76,6 @@ class MainFragment : Fragment() {
         updateTime()
         registerLocReceiver()
         locationUpdates()
-        viewModel.tracks.observe(viewLifecycleOwner) {
-            Log.d("MyLog", "List size: ${it.size}")
-        }
     }
 
     override fun onResume() {

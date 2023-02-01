@@ -34,4 +34,7 @@
     <string name="tv_time_dialog">Время:</string>
     <string name="tv_speed_dialog">Скорость:</string>
     <string name="tv_distance_dialog">Дистанция:</string>
+    <!--fragment_tracks-->
+    <string name="empty">Пусто</string>
+    <!--Track Adapter-->
 </resources>
