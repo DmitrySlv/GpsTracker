@@ -36,5 +36,6 @@
     <string name="tv_distance_dialog">Дистанция:</string>
     <!--fragment_tracks-->
     <string name="empty">Пусто</string>
-    <!--Track Adapter-->
+    <!--Track Fragment-->
+    <string name="toast_track_deleted">Маршрут удалён</string>
 </resources>
