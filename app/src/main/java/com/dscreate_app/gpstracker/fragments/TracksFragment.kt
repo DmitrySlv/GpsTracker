@@ -14,6 +14,8 @@ import com.dscreate_app.gpstracker.R
 import com.dscreate_app.gpstracker.adapters.TrackAdapter
 import com.dscreate_app.gpstracker.database.TrackItem
 import com.dscreate_app.gpstracker.databinding.FragmentTracksBinding
+import com.dscreate_app.gpstracker.utils.ClickType
+import com.dscreate_app.gpstracker.utils.openFragment
 import com.dscreate_app.gpstracker.utils.showToast
 import com.dscreate_app.gpstracker.viewModels.MainViewModel
 import com.dscreate_app.gpstracker.viewModels.ViewModelFactory
@@ -65,9 +67,16 @@ class TracksFragment : Fragment(), TrackAdapter.Listener {
         }
     }
 
-    override fun onClick(trackItem: TrackItem) {
-       viewModel.deleteTrack(trackItem)
-        showToast(getString(R.string.toast_track_deleted))
+    override fun onClick(trackItem: TrackItem, type: ClickType) {
+       when(type) {
+           ClickType.DELETE -> {
+               viewModel.deleteTrack(trackItem)
+               showToast(getString(R.string.toast_track_deleted))
+           }
+           ClickType.OPEN -> {
+               openFragment(ViewTrackFragment.newInstance())
+           }
+       }
     }
 
     companion object {

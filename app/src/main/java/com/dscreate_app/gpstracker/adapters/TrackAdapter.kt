@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dscreate_app.gpstracker.R
 import com.dscreate_app.gpstracker.database.TrackItem
 import com.dscreate_app.gpstracker.databinding.TrackItemBinding
+import com.dscreate_app.gpstracker.utils.ClickType
 
 class TrackAdapter(private val listener: Listener): ListAdapter<TrackItem, TrackAdapter.TrackHolder>(DiffUtils) {
 
@@ -30,6 +31,7 @@ class TrackAdapter(private val listener: Listener): ListAdapter<TrackItem, Track
         private var trackTemp: TrackItem? = null
         init {
             binding.ibDelete.setOnClickListener(this)
+            binding.cardItem.setOnClickListener(this)
         }
 
         fun setData(trackItem: TrackItem) = with(binding) {
@@ -48,13 +50,16 @@ class TrackAdapter(private val listener: Listener): ListAdapter<TrackItem, Track
         }
 
         override fun onClick(view: View?) {
-            trackTemp?.let {
-                listener.onClick(it)
+          val type = when(view?.id) {
+                R.id.ibDelete -> ClickType.DELETE
+                R.id.cardItem -> ClickType.OPEN
+                else -> ClickType.OPEN
             }
+            trackTemp?.let { listener.onClick(it, type) }
         }
     }
 
     interface Listener {
-        fun onClick(trackItem: TrackItem)
+        fun onClick(trackItem: TrackItem, type: ClickType)
     }
 }
