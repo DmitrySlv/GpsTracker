@@ -1,4 +1,4 @@
-package com.dscreate_app.gpstracker
+package com.dscreate_app.gpstracker.database
 
 import android.app.Application
 import com.dscreate_app.gpstracker.database.MainDb

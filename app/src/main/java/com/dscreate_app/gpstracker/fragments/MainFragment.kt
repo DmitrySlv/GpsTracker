@@ -21,7 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.dscreate_app.gpstracker.MainApp
+import com.dscreate_app.gpstracker.database.MainApp
 import com.dscreate_app.gpstracker.R
 import com.dscreate_app.gpstracker.database.TrackItem
 import com.dscreate_app.gpstracker.databinding.FragmentMainBinding

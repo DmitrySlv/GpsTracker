@@ -1,15 +1,13 @@
 package com.dscreate_app.gpstracker.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dscreate_app.gpstracker.MainApp
+import com.dscreate_app.gpstracker.database.MainApp
 import com.dscreate_app.gpstracker.R
 import com.dscreate_app.gpstracker.adapters.TrackAdapter
 import com.dscreate_app.gpstracker.database.TrackItem
@@ -74,6 +72,7 @@ class TracksFragment : Fragment(), TrackAdapter.Listener {
                showToast(getString(R.string.toast_track_deleted))
            }
            ClickType.OPEN -> {
+               viewModel.currentTrack.value = trackItem
                openFragment(ViewTrackFragment.newInstance())
            }
        }
