@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.preference.PreferenceManager
 import com.dscreate_app.gpstracker.R
 import com.dscreate_app.gpstracker.database.MainApp
 import com.dscreate_app.gpstracker.databinding.FragmentViewTrackBinding
@@ -98,7 +99,10 @@ class ViewTrackFragment : Fragment() {
 
     private fun getPolyline(geoPoints: String): Polyline {
         val polyline = Polyline()
-        polyline.outlinePaint.color = Color.BLUE
+        polyline.outlinePaint.color = Color.parseColor(
+            PreferenceManager.getDefaultSharedPreferences(requireContext())
+                .getString(SHARED_PREF_COLOR_KEY, SHARED_PREF_DEF_VALUE)
+        )
         val list = geoPoints.split("/")
         list.forEach {
             if (it.isEmpty()) return@forEach
@@ -110,6 +114,8 @@ class ViewTrackFragment : Fragment() {
 
     companion object {
         private const val SHARED_PREF_TABLE_NAME = "osm_pref"
+        private const val SHARED_PREF_COLOR_KEY = "color_key"
+        private const val SHARED_PREF_DEF_VALUE = "#03A9F4"
 
         @JvmStatic
         fun newInstance() = ViewTrackFragment()

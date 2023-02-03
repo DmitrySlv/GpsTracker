@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.preference.PreferenceManager
 import com.dscreate_app.gpstracker.R
 import com.dscreate_app.gpstracker.database.MainApp
 import com.dscreate_app.gpstracker.database.TrackItem
@@ -228,7 +229,10 @@ class MainFragment : Fragment() {
 
     private fun initOSM() = with(binding) {
         polyLine = Polyline()
-        polyLine?.outlinePaint?.color = Color.BLUE
+        polyLine?.outlinePaint?.color = Color.parseColor(
+            PreferenceManager.getDefaultSharedPreferences(requireContext())
+                .getString(SHARED_PREF_COLOR_KEY, SHARED_PREF_DEF_VALUE)
+        )
         map.controller.setZoom(20.0)
         val mLocProvider = GpsMyLocationProvider(activity)
         val myLocOverlay = MyLocationNewOverlay(mLocProvider, map)
@@ -341,6 +345,8 @@ class MainFragment : Fragment() {
     companion object {
 
         private const val SHARED_PREF_TABLE_NAME = "osm_pref"
+        private const val SHARED_PREF_COLOR_KEY = "color_key"
+        private const val SHARED_PREF_DEF_VALUE = "#03A9F4"
 
         @JvmStatic
         fun newInstance() = MainFragment()
