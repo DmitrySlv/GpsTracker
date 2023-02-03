@@ -21,8 +21,8 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.dscreate_app.gpstracker.database.MainApp
 import com.dscreate_app.gpstracker.R
+import com.dscreate_app.gpstracker.database.MainApp
 import com.dscreate_app.gpstracker.database.TrackItem
 import com.dscreate_app.gpstracker.databinding.FragmentMainBinding
 import com.dscreate_app.gpstracker.location.LocationModel
@@ -40,7 +40,6 @@ import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainFragment : Fragment() {
 
@@ -140,7 +139,7 @@ class MainFragment : Fragment() {
         )
     }
 
-    private fun geoPointsToString(list: ArrayList<GeoPoint>): String {
+    private fun geoPointsToString(list: List<GeoPoint>): String {
         val sBuilder = StringBuilder()
         list.forEach {
             sBuilder.append("${it.latitude}, ${it.longitude}/")
@@ -205,7 +204,7 @@ class MainFragment : Fragment() {
             TimeUtils.getDate(),
             String.format("%.1f", locationModel?.distance?.div(1000) ?: 0),
             getAverageSpeed(locationModel?.distance ?: 0.0f),
-            geoPointsToString(locationModel?.geoPointsList ?: arrayListOf())
+            geoPointsToString(locationModel?.geoPointsList ?: listOf())
     )
 
     private fun startLocService() {
@@ -320,17 +319,17 @@ class MainFragment : Fragment() {
             .registerReceiver(receiver, locFilter)
     }
 
-    private fun addPoint(list: ArrayList<GeoPoint>) {
+    private fun addPoint(list: List<GeoPoint>) {
         polyLine?.addPoint(list[list.size - 1])
     }
 
-    private fun fillPolyLine(list: ArrayList<GeoPoint>) {
+    private fun fillPolyLine(list: List<GeoPoint>) {
         list.forEach {
             polyLine?.addPoint(it)
         }
     }
 
-    private fun updatePolyLine(list: ArrayList<GeoPoint>) {
+    private fun updatePolyLine(list: List<GeoPoint>) {
         if (list.size > 1 && firstStart) {
             fillPolyLine(list)
             firstStart = false
