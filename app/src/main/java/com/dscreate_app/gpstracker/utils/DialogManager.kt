@@ -34,8 +34,10 @@ object DialogManager {
         val dialog = builder.create()
         with(binding) {
             val time = item?.time + context.getString(R.string.minutes)
-            val speed = item?.speed + context.getString(R.string.meter_in_sec)
-            val distance = item?.distance + context.getString(R.string.distance_in_kilometer)
+            val speed = context.getString(R.string.speed_tv) + item?.speed +
+                    context.getString(R.string.meter_in_sec)
+            val distance = context.getString(R.string.distance_tv) + item?.distance +
+                    context.getString(R.string.distance_in_kilometer)
             tvTime.text = time
             tvSpeed.text = speed
             tvDistance.text = distance
