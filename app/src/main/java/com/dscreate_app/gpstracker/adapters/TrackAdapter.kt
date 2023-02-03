@@ -37,7 +37,9 @@ class TrackAdapter(private val listener: Listener): ListAdapter<TrackItem, Track
         fun setData(trackItem: TrackItem) = with(binding) {
             trackTemp = trackItem
             trackItem.apply {
-                val speed = String.format(speed + root.context.getString(R.string.meter_in_sec))
+                val date = String.format(root.context.getString(R.string.date_tv) + date)
+                val speed = String.format(root.context.getString(R.string.speed_tv) + speed +
+                        root.context.getString(R.string.meter_in_sec))
                 val time = String.format(time + root.context.getString(R.string.minutes))
                 val distance = String.format(distance +
                         root.context.getString(R.string.distance_in_kilometer))

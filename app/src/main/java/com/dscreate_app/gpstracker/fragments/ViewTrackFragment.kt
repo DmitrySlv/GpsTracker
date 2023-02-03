@@ -30,6 +30,7 @@ class ViewTrackFragment : Fragment() {
     private val viewModel: MainViewModel by activityViewModels {
         ViewModelFactory((requireContext().applicationContext as MainApp).database)
     }
+    private var startPoint: GeoPoint? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +44,9 @@ class ViewTrackFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getTrack()
+        binding.fCenter.setOnClickListener {
+          startPoint.let { binding.map.controller.animateTo(startPoint) }
+        }
     }
 
     override fun onDestroyView() {
@@ -76,6 +80,7 @@ class ViewTrackFragment : Fragment() {
             map.overlays.add(polyline)
             setMarkers(polyline.actualPoints)
             goToStartPosition(polyline.actualPoints[0])
+            startPoint = polyline.actualPoints[0]
         }
     }
 

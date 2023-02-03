@@ -14,7 +14,7 @@
     <string name="toast_need_perm">"Пожалуйста, разрешите использование вашего местоположения!"</string>
     <string name="toast_gps_disabled">"GPS выключен. Пожалуйста, включите его на своем устройстве"</string>
     <string name="time_tv">Время:</string>
-    <string name="date_tv">Дата::</string>
+    <string name="date_tv">Дата:</string>
     <string name="distance_tv">Дистанция:</string>
     <string name="speed_tv">Скорость:</string>
     <string name="speed_average_tv">Средняя скорость:</string>
