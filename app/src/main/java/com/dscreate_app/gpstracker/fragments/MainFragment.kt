@@ -82,6 +82,7 @@ class MainFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         checkLocationPermission()
+        firstStart = true
     }
 
     override fun onDestroyView() {
@@ -100,9 +101,10 @@ class MainFragment : Fragment() {
             val distance =
                 getString(R.string.distance_tv) + String.format("%.1f", it.distance) +
                         getString(R.string.meter_tv)
-            val speed =
-                getString(R.string.speed_tv) + String.format("%.1f", it.speed) +
-                        getString(R.string.speed_tv_in_meter)
+//            val speed =
+//                getString(R.string.speed_tv) + String.format("%.1f", it.speed) +
+//                        getString(R.string.speed_tv_in_meter)
+            val speed = it.speed.toString()
             val averageSpeed =
                 getString(R.string.speed_average_tv) + String.format(getAverageSpeed(it.distance)) +
                         getString(R.string.speed_tv_in_meter)
@@ -246,8 +248,8 @@ class MainFragment : Fragment() {
         myLocOverlay.enableFollowLocation()
         myLocOverlay.runOnFirstFix {
             map.overlays.clear()
-            map.overlays.add(myLocOverlay)
             map.overlays.add(polyLine)
+            map.overlays.add(myLocOverlay)
         }
     }
 
@@ -330,7 +332,7 @@ class MainFragment : Fragment() {
     }
 
     private fun addPoint(list: List<GeoPoint>) {
-        polyLine?.addPoint(list[list.size - 1])
+        if (list.isNotEmpty()) polyLine?.addPoint(list[list.size - 1])
     }
 
     private fun fillPolyLine(list: List<GeoPoint>) {

@@ -39,7 +39,7 @@
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
         android:paddingBottom="3dp"
-        android:text="Дата: 12/12/22 12:00"
+        android:text="Дата:"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -67,7 +67,7 @@
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
         android:paddingBottom="3dp"
-        android:text="Средняя скорость: 3,5 км/ч"
+        android:text="Средняя скорость: 0,0 м/с"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@+id/tvTime"
         app:layout_constraintTop_toBottomOf="@+id/tvTime" />
@@ -81,7 +81,7 @@
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
         android:paddingBottom="3dp"
-        android:text="Дистанция: 15,5 км"
+        android:text="Дистанция: 0,0 км"
         android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/tvAverageSpeed"

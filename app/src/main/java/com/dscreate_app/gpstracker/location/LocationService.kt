@@ -15,6 +15,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.preference.PreferenceManager
 import com.dscreate_app.gpstracker.MainActivity
 import com.dscreate_app.gpstracker.R
 import com.google.android.gms.location.*
@@ -29,6 +30,7 @@ class LocationService: Service() {
     private var lastLocation: Location? = null
     private var distance = 0.0f
     private lateinit var geoPointsList: ArrayList<GeoPoint>
+    private var isDebug = false
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -58,9 +60,10 @@ class LocationService: Service() {
             super.onLocationResult(locationResult)
             val currentLocation = locationResult.lastLocation
             if (lastLocation != null && currentLocation != null) {
-                if (currentLocation.speed > 0.2)
+                if (currentLocation.speed > 0.4 || isDebug) {
                     distance += lastLocation?.distanceTo(currentLocation) ?: 0.0f
-                geoPointsList.add(GeoPoint(currentLocation.latitude, currentLocation.longitude))
+                    geoPointsList.add(GeoPoint(currentLocation.latitude, currentLocation.longitude))
+                }
                 val locModel = LocationModel(
                     currentLocation.speed,
                     distance,
@@ -105,12 +108,16 @@ class LocationService: Service() {
     }
 
     private fun initLocation() {
+        val updateInterval = PreferenceManager.getDefaultSharedPreferences(
+            this
+        ).getString(SHARED_PREF_KEY, SHARED_PREF_DEF_VALUE)?.toLong() ?: SHARED_PREF_DEF_VALUE
         locationRequest = LocationRequest.create()
-        locationRequest.interval = 5000
-        locationRequest.fastestInterval = 5000
+        locationRequest.interval = updateInterval as Long
+        locationRequest.fastestInterval = updateInterval
         locationRequest.priority = PRIORITY_HIGH_ACCURACY
 
         locationProvider = LocationServices.getFusedLocationProviderClient(baseContext)
+        Log.d("MyLog", "Interval: $updateInterval")
     }
 
     private fun startLocationUpdates() {
@@ -131,6 +138,8 @@ class LocationService: Service() {
         private const val CHANNEL_NAME = "Location Service"
         private const val REQUEST_CODE = 10
         private const val NOTIFICATION_ID = 99
+        private const val SHARED_PREF_KEY = "update_time_key"
+        private const val SHARED_PREF_DEF_VALUE = "3000"
         const val LOC_MODEL_INTENT = "loc_intent"
 
         var isRunning = false
