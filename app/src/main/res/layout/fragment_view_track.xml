@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.ViewTrackFragment">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:src="@drawable/my_location"
+        app:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </org.osmdroid.views.MapView>
+
+    <TextView
+        android:id="@+id/tvData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#ADFFFFFF"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:paddingBottom="3dp"
+        android:text="Дата:"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="#ADFFFFFF"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:paddingBottom="3dp"
+        android:text="Время: 00:00:00"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/tvData"
+        app:layout_constraintTop_toBottomOf="@+id/tvData" />
+
+    <TextView
+        android:id="@+id/tvAverageSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="#ADFFFFFF"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:paddingBottom="3dp"
+        android:text="Средняя скорость: 0,0 м/с"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/tvTime"
+        app:layout_constraintTop_toBottomOf="@+id/tvTime" />
+
+    <TextView
+        android:id="@+id/tvDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="#ADFFFFFF"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:paddingBottom="3dp"
+        android:text="Дистанция: 0,0 км"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@+id/tvAverageSpeed"
+        app:layout_constraintTop_toBottomOf="@+id/tvAverageSpeed" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
