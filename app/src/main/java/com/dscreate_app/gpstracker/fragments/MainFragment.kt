@@ -102,7 +102,7 @@ class MainFragment : Fragment() {
                 getString(R.string.distance_tv) + PROBEL + String.format("%.1f", it.distance) +
                         PROBEL + getString(R.string.meter_tv)
             val speed =
-                getString(R.string.speed_tv) + PROBEL +  it.speed + PROBEL +
+                getString(R.string.speed_tv) + PROBEL + String.format("%.1f", it.speed) + PROBEL +
                         getString(R.string.speed_tv_in_meter)
 //            val speed = it.speed.toString()
             val averageSpeed =
