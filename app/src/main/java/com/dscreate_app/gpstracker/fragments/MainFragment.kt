@@ -26,8 +26,8 @@ import com.dscreate_app.gpstracker.R
 import com.dscreate_app.gpstracker.database.MainApp
 import com.dscreate_app.gpstracker.database.TrackItem
 import com.dscreate_app.gpstracker.databinding.FragmentMainBinding
-import com.dscreate_app.gpstracker.location.LocationModel
-import com.dscreate_app.gpstracker.location.LocationService
+import com.dscreate_app.gpstracker.utils.location.LocationModel
+import com.dscreate_app.gpstracker.utils.location.LocationService
 import com.dscreate_app.gpstracker.utils.DialogManager
 import com.dscreate_app.gpstracker.utils.TimeUtils
 import com.dscreate_app.gpstracker.utils.checkPermission
@@ -99,14 +99,14 @@ class MainFragment : Fragment() {
     private fun locationUpdates() = with(binding) {
         viewModel.locationUpdates.observe(viewLifecycleOwner) {
             val distance =
-                getString(R.string.distance_tv) + String.format("%.1f", it.distance) +
-                        getString(R.string.meter_tv)
+                getString(R.string.distance_tv) + PROBEL + String.format("%.1f", it.distance) +
+                        PROBEL + getString(R.string.meter_tv)
             val speed =
-                getString(R.string.speed_tv) + String.format("%.1f", it.speed) +
+                getString(R.string.speed_tv) + PROBEL +  it.speed + PROBEL +
                         getString(R.string.speed_tv_in_meter)
 //            val speed = it.speed.toString()
             val averageSpeed =
-                getString(R.string.speed_average_tv) + String.format(getAverageSpeed(it.distance)) +
+                getString(R.string.speed_average_tv) + PROBEL + getAverageSpeed(it.distance) + PROBEL +
                         getString(R.string.speed_tv_in_meter)
 
             tvDistance.text = distance
@@ -211,7 +211,7 @@ class MainFragment : Fragment() {
             null,
             getCurrentTime(),
             TimeUtils.getDate(),
-            String.format("%.1f", locationModel?.distance?.div(1000) ?: 0),
+            String.format("%.1f", locationModel?.distance?.div(1000) ?: 0f),
             getAverageSpeed(locationModel?.distance ?: 0.0f),
             geoPointsToString(locationModel?.geoPointsList ?: listOf())
     )
@@ -355,6 +355,7 @@ class MainFragment : Fragment() {
         private const val SHARED_PREF_TABLE_NAME = "osm_pref"
         private const val SHARED_PREF_COLOR_KEY = "color_key"
         private const val SHARED_PREF_DEF_VALUE = "#03A9F4"
+        private const val PROBEL = " "
 
         @JvmStatic
         fun newInstance() = MainFragment()

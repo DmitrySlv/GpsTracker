@@ -1,4 +1,4 @@
-package com.dscreate_app.gpstracker.location
+package com.dscreate_app.gpstracker.utils.location
 
 import android.Manifest
 import android.app.NotificationChannel

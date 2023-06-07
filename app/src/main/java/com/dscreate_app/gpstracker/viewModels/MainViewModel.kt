@@ -6,7 +6,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.dscreate_app.gpstracker.database.MainDb
 import com.dscreate_app.gpstracker.database.TrackItem
-import com.dscreate_app.gpstracker.location.LocationModel
+import com.dscreate_app.gpstracker.utils.location.LocationModel
 import kotlinx.coroutines.launch
 
 class MainViewModel(db: MainDb): ViewModel() {

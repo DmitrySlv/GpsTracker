@@ -26,7 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".location.LocationService"
+        <service android:name=".utils.location.LocationService"
             android:foregroundServiceType="location"
             android:enabled="true" />
         <meta-data

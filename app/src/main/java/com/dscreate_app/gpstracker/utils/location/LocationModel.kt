@@ -1,4 +1,4 @@
-package com.dscreate_app.gpstracker.location
+package com.dscreate_app.gpstracker.utils.location
 
 import org.osmdroid.util.GeoPoint
 import java.io.Serializable

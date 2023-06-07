@@ -32,7 +32,7 @@
     <string name="save_this_track">Сохранить этот маршрут?</string>
     <string name="button_save">Сохранить</string>
     <string name="button_cancel">Отменить</string>
-    <string name="tv_time_dialog">Время:</string>
+    <string name="tv_time_dialog">Время: </string>
     <string name="tv_speed_dialog">Скорость:</string>
     <string name="tv_distance_dialog">Дистанция:</string>
     <!--fragment_tracks-->
